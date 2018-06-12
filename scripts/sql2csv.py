@@ -1,16 +1,26 @@
-from db2csv.models import Cins,Retiketi,Kasa,Satis,Stok,Uetiket,Urun
+from db2csv.models import Cins,Retiketi,Kasa,Satis,Stok,Uetiket,Urun 
+# SqlDB django modellerine donusturuldu ve modellerden import edildi
 import pandas as pd
 
+# Elizmizde olan sql dosyalarini pandas ve diger gerekli platformlarda kullanabilmek
+# icin csv formatina donusturme islemi
+
+# Generic bir fonksyon yazmak yerine DB'deki her tablo farkli oldugundan
+# ve tablolardi butun sutunlara ihtiyac olmadigindan modeller manuel olarak cekildi
+# bu sebeple butun fonksyonlarin calisma mantiklari ayni olmakla beraber kullandiklari
+# fieldlar birbirlerinden farkli
+# yorumlar tek fonksyon uzerinden anlatilmis olup digerlerine gerek duyulmadi
 
 def types(obj):
-	types = []
+	# DB'deki cins tablosu
+	types = [] # bir dictionary yarattik
 
-	for ele in obj:
+	for ele in obj: # for dongusu ile cins tablosundaki istedigimiz sutunlar dictionary'e eklendi
 		types.append({"type_id":ele.cinsno,"type":ele.cins})
 
-	df = pd.DataFrame(types,columns=["type_id","type"])
-	df = df.fillna(value="blank")
-	df.to_csv('types.csv',index=False)
+	df = pd.DataFrame(types,columns=["type_id","type"]) # bu verilerle datafram olusturuldu
+	df = df.fillna(value="blank") # bos olan satir varsa "blank" degeri ile dolduruldu
+	df.to_csv('types.csv',index=False) # yeni csv dosyasina aktardik
 
 
 def labelR(obj):
@@ -174,8 +184,8 @@ def product(obj):
 
 
 
-cins = Cins.objects.all()
-types(cins)
+cins = Cins.objects.all() # Db'deki verilerin ice aktarimi
+types(cins) # fonsyon cagirilarak gerceklenen is
 
 retiketi = Retiketi.objects.all()
 labelR(retiketi)
